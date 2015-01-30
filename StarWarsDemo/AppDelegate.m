@@ -20,11 +20,14 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     
+    self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     // Screen Type: iPhone or iPad
     if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
         // tableta
         [self configureForPad];
     }
+    self.window.backgroundColor = [UIColor whiteColor];
+    [self.window makeKeyAndVisible];
         return YES;
 }
 // iPad cfg
@@ -63,14 +66,8 @@
     splitVC.delegate = charVC;
     swuTableVC.delegate = charVC;
     // 7. Asignamos SplitVC// Lo asignamos como root, carga la window en appdelegate
-    
-    self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-    // Override point for customization after application launch.
-    self.window.backgroundColor = [UIColor whiteColor];
-    [self.window makeKeyAndVisible];
-    
     self.window.rootViewController = splitVC;
-
+    // Override point for customization after application launch.
     
 }
 

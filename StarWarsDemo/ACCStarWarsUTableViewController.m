@@ -68,26 +68,63 @@
 #pragma mark - Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-#warning Potentially incomplete method implementation.
     // Return the number of sections.
-    return 0;
+    return 2; // rebels and imperial
 }
 
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-#warning Incomplete method implementation.
+- (NSInteger)tableView:(UITableView *)tableView
+ numberOfRowsInSection:(NSInteger)section {
     // Return the number of rows in the section.
-    return 0;
+    if (section == IMPERIAL_SECTION) {
+        return [self.model imperialCount];
+    }else{
+        return [self.model rebelCount];
+    }
+}
+// title in category-section
+-(NSString *) tableView:(UITableView *)tableView
+titleForHeaderInSection:(NSInteger)section{
+    
+    if (section == IMPERIAL_SECTION) {
+        return @"Empire";
+    }else{
+        return @"Rebel Alliance";
+    }
 }
 
-/*
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:<#@"reuseIdentifier"#> forIndexPath:indexPath];
+-(UITableViewCell*) tableView:(UITableView *)tableView
+        cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     
-    // Configure the cell...
+    // Reuse Id
+    static NSString *cellId = @"StarWarsCell"; // constant
     
+    // Averiguar de que personaje me están hablando
+    ACCStarWarsCharacter *character;
+    if (indexPath.section == IMPERIAL_SECTION) {
+        character = [self.model imperialCharacterAtIndex:indexPath.row];
+    }else{
+        character = [self.model rebelCharacterAtIndex:indexPath.row];
+    }
+    
+    // crear una celda
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellId]; // create cell var
+    
+    if (cell == nil) {
+        // tengo que crear la celda si no se creo anteriormente
+        cell = [[UITableViewCell alloc]
+                initWithStyle:UITableViewCellStyleSubtitle
+                reuseIdentifier:cellId];
+    }
+    
+    // sincronizar modelo (personaje) -> vista (celda)
+    cell.imageView.image = character.photo;
+    cell.textLabel.text = character.alias;
+    cell.detailTextLabel.text = character.name;
+    
+    // La devuelvo
     return cell;
+    
 }
-*/
 
 /*
 // Override to support conditional editing of the table view.
