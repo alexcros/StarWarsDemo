@@ -17,6 +17,7 @@
 		8E71FACE1A7BD53800161A49 /* ACCStarWarsUTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8E71FACC1A7BD53800161A49 /* ACCStarWarsUTableViewController.m */; };
 		8E71FAD31A7BDEBF00161A49 /* ACCStarWarsCharacterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8E71FAD11A7BDEBF00161A49 /* ACCStarWarsCharacterViewController.m */; };
 		8E71FAD41A7BDEBF00161A49 /* ACCStarWarsCharacterViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8E71FAD21A7BDEBF00161A49 /* ACCStarWarsCharacterViewController.xib */; };
+		8E71FAD61A7BF22700161A49 /* darthVader.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 8E71FAD51A7BF22700161A49 /* darthVader.jpg */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -49,6 +50,7 @@
 		8E71FAD01A7BDEBF00161A49 /* ACCStarWarsCharacterViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ACCStarWarsCharacterViewController.h; sourceTree = "<group>"; };
 		8E71FAD11A7BDEBF00161A49 /* ACCStarWarsCharacterViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ACCStarWarsCharacterViewController.m; sourceTree = "<group>"; };
 		8E71FAD21A7BDEBF00161A49 /* ACCStarWarsCharacterViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ACCStarWarsCharacterViewController.xib; sourceTree = "<group>"; };
+		8E71FAD51A7BF22700161A49 /* darthVader.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = darthVader.jpg; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -90,6 +92,7 @@
 		8E71FA9D1A7BC71C00161A49 /* StarWarsDemo */ = {
 			isa = PBXGroup;
 			children = (
+				8E71FAD71A7BF23200161A49 /* Resources */,
 				8E71FAA21A7BC71C00161A49 /* AppDelegate.h */,
 				8E71FAA31A7BC71C00161A49 /* AppDelegate.m */,
 				8E71FAA51A7BC71C00161A49 /* Images.xcassets */,
@@ -148,6 +151,14 @@
 				8E71FAD21A7BDEBF00161A49 /* ACCStarWarsCharacterViewController.xib */,
 			);
 			name = Controllers;
+			sourceTree = "<group>";
+		};
+		8E71FAD71A7BF23200161A49 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				8E71FAD51A7BF22700161A49 /* darthVader.jpg */,
+			);
+			name = Resources;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -232,6 +243,7 @@
 			files = (
 				8E71FAD41A7BDEBF00161A49 /* ACCStarWarsCharacterViewController.xib in Resources */,
 				8E71FAA91A7BC71C00161A49 /* LaunchScreen.xib in Resources */,
+				8E71FAD61A7BF22700161A49 /* darthVader.jpg in Resources */,
 				8E71FAA61A7BC71C00161A49 /* Images.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

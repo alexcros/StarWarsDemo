@@ -25,11 +25,7 @@
         // tableta
         [self configureForPad];
     }
-    self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-    // Override point for customization after application launch.
-    self.window.backgroundColor = [UIColor whiteColor];
-    [self.window makeKeyAndVisible];
-    return YES;
+        return YES;
 }
 // iPad cfg
 -(void)configureForPad{
@@ -67,8 +63,14 @@
     splitVC.delegate = charVC;
     swuTableVC.delegate = charVC;
     // 7. Asignamos SplitVC// Lo asignamos como root, carga la window en appdelegate
-    self.window.rootViewController = splitVC;
     
+    self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+    // Override point for customization after application launch.
+    self.window.backgroundColor = [UIColor whiteColor];
+    [self.window makeKeyAndVisible];
+    
+    self.window.rootViewController = splitVC;
+
     
 }
 

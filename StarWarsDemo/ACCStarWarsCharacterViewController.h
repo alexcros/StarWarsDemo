@@ -41,6 +41,7 @@
 ACCStarWarsUTableViewControllerDelegate> // esta clase es delegado del splitVC y de TableVC
 
 @property (weak,nonatomic) ACCStarWarsCharacter *model;
+@property (weak, nonatomic) IBOutlet UIImageView *photoView; // link to .xib
 
 -(id) initWithModel: (ACCStarWarsCharacter*) model;
 
