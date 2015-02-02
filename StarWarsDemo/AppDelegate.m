@@ -64,7 +64,7 @@
     // 6. Asignamos como delegado a charVC StarWarsCharacterViewController characteres
     
     // Asignamos delegados
-    splitVC.delegate = charVC;
+   splitVC.delegate = charVC;
   swuTableVC.delegate = charVC;
     
     // 7. Asignamos SplitVC// Lo asignamos como root, carga la window en appdelegate

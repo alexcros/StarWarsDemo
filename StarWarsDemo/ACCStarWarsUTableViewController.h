@@ -14,6 +14,9 @@
 #define REBEL_SECTION 1 //definimos las categorias or sections de la tableView
 #define IMPERIAL_SECTION 0
 
+#define CHARACTER_DID_CHANGE_NOTIFICATION_NAME @"CHARACTER" // constantes para las notificacones del webview
+#define CHARACTER_KEY @"CHARACTERKEY"
+
 #import <UIKit/UIKit.h>
 #import "ACCStarWarsUniverse.h" // for import StarWarsUniverse model
 #import "ACCStarWarsUTableViewController.h"

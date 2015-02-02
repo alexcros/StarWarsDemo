@@ -7,7 +7,7 @@
 //
 
 #import "WikiViewController.h"
-
+#import "ACCStarWarsUTableViewController.h"
 /* no used
 @interface WikiViewController ()
 
@@ -29,7 +29,27 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view from its nib.
+}
+
+
+
+-(void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
+    // Alta en notificaciones
+    NSNotificationCenter *nc = [NSNotificationCenter defaultCenter];
+    [nc addObserver:self
+           selector:@selector(notifyThatCharacterDidChange:) //(notif yThatCharacterDidChange:)
+               name:CHARACTER_DID_CHANGE_NOTIFICATION_NAME
+             object:nil];
+    
+    
+    // Asignamos delegado
+    self.browser.delegate = self;
+    
+    
+    // sincronizar modelo -> vista
+    [self syncViewWithModel];
+    
 }
 
 - (void)didReceiveMemoryWarning {
@@ -37,6 +57,14 @@
     // Dispose of any resources that can be recreated.
 }
 
+-(void)viewWillDisappear:(BOOL)animated{
+    [super viewWillDisappear:animated];
+    
+    //baja en notificaciones
+    NSNotificationCenter *nc = [NSNotificationCenter defaultCenter];
+    [nc removeObserver:self];
+    
+}
 #pragma mark - UIWebViewDelegate
 -(void) webViewDidFinishLoad:(UIWebView *)webView{
     
@@ -60,6 +88,22 @@ shouldStartLoadWithRequest:(NSURLRequest *)request
     }
 }
 
+#pragma mark - Notifications
+//CHARACTER_DID_CHANGE_NOTIFICATION_NAME
+-(void)notifyThatCharacterDidChange:(NSNotification*)n{
+    
+    // Extraigo el personaje
+    ACCStarWarsCharacter *newModel = [n.userInfo objectForKey:CHARACTER_KEY];
+    
+    // Cambiar mi modelo
+    self.model = newModel;
+    
+    // sincronizar vistas con el modelo nuevo
+    [self syncViewWithModel];
+    
+}
+
+
 #pragma mark - Utils
 -(void) syncViewWithModel{
     
@@ -74,6 +118,9 @@ shouldStartLoadWithRequest:(NSURLRequest *)request
                        requestWithURL:self.model.wikiPage];
     [self.browser loadRequest:r];
     
+    
+    
+     
     
 }
 

@@ -102,7 +102,8 @@
     // Pushearlo
     [self.navigationController pushViewController:wikiVC
                                          animated:YES];
-    
+
+  
     
 }
 
