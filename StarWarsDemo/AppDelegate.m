@@ -46,14 +46,15 @@
     //4.1 combinador 1. Inicializamos y colocamos en memoria un navigator para el tableView personajes y push StarWarsUniverseController
     // Creamos los combinadores: Navigation Controllers
     UINavigationController *tableNav = [[UINavigationController alloc]init];
+    tableNav.viewControllers=@[swuTableVC];
     // push TableVC
-   [tableNav pushViewController:swuTableVC
-                animated:NO];
+   //[tableNav pushViewController:swuTableVC
+     //           animated:NO];
     //4.2 combinador 2: Inicializamos y colocamos en memoria otro controlador de navegador: cargamos el StarWarsCharacterViewController xib
     UINavigationController *charNav = [[UINavigationController alloc] init];
-    
-    [charNav pushViewController:charVC
-                       animated:NO];
+    charNav.viewControllers=@[charVC];
+  //[charNav pushViewController:charVC
+    //                   animated:NO];
 
     // 5. Iniciamos SplitVC: por orden colocamos los navegadores 5.1.la tabla StarWarsUniverse a la izquierda y 2. nav. StarWarsCharacter a la derecha
     
@@ -64,7 +65,8 @@
     
     // Asignamos delegados
     splitVC.delegate = charVC;
-    swuTableVC.delegate = charVC;
+  swuTableVC.delegate = charVC;
+    
     // 7. Asignamos SplitVC// Lo asignamos como root, carga la window en appdelegate
     self.window.rootViewController = splitVC;
     // Override point for customization after application launch.

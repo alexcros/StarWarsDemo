@@ -29,8 +29,8 @@
  */
 
 #import "ACCStarWarsUTableViewController.h"
-
-//#import "ACCStarWarsCharacterViewController.h"
+#import "ACCStarWarsUniverse.h"
+#import "ACCStarWarsCharacterViewController.h"
 
 @interface ACCStarWarsUTableViewController ()
 // property with model
@@ -126,6 +126,59 @@ titleForHeaderInSection:(NSInteger)section{
     
 }
 
+#pragma mark - Table Delegate
+-(void)tableView:(UITableView *)tableView
+didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    
+    // averiguar de que persoanje se trata
+    ACCStarWarsCharacter *character;
+    
+    if (indexPath.section == IMPERIAL_SECTION) {
+        character = [self.model imperialCharacterAtIndex:indexPath.row];
+    }else{
+        character = [self.model rebelCharacterAtIndex:indexPath.row];
+    }
+    
+    if ([self.delegate respondsToSelector:@selector(starWarsUTableViewController:didSelectCharacter:)]) {
+        // Entiende el mensaje se lo mando
+        [self.delegate starWarsUTableViewController:self
+                                 didSelectCharacter:character];
+        
+    }
+    
+}
+
+
+#pragma mark -  ACCStarWarsUTableViewControllerDelegate
+
+-(void) starWarsUTableViewController:(ACCStarWarsUTableViewController *) swuTableVC
+                    didSelectCharacter:(ACCStarWarsCharacter *)character{
+    
+    // Crear un CharacterVC
+    ACCStarWarsCharacterViewController *charVC = [[ACCStarWarsCharacterViewController alloc]initWithModel:character];
+
+    // Pushearlo
+    [self.navigationController pushViewController:charVC
+                                         animated:YES];
+    
+}
+/*
+ #pragma mark -  AGTStarWarsUniverseViewControllerDelegate
+ -(void) starWarsUniverseViewController:(AGTStarWarsUniverseViewController *)uVC
+ didSelectCharacter:(AGTStarWarsCharacter *)character{
+ 
+ 
+ // Crear un CharacterVC
+ AGTCharacterViewController *charVC = [[AGTCharacterViewController alloc] initWithModel:character];
+ 
+ 
+ // Pushearlo
+ [self.navigationController pushViewController:charVC
+ animated:YES];
+ 
+ 
+ }
+*/
 /*
 // Override to support conditional editing of the table view.
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -160,21 +213,7 @@ titleForHeaderInSection:(NSInteger)section{
 }
 */
 
-/*
-#pragma mark - Table view delegate
 
-// In a xib-based application, navigation from a table can be handled in -tableView:didSelectRowAtIndexPath:
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    // Navigation logic may go here, for example:
-    // Create the next view controller.
-    <#DetailViewController#> *detailViewController = [[<#DetailViewController#> alloc] initWithNibName:<#@"Nib name"#> bundle:nil];
-    
-    // Pass the selected object to the new view controller.
-    
-    // Push the view controller.
-    [self.navigationController pushViewController:detailViewController animated:YES];
-}
-*/
 
 /*
 #pragma mark - Navigation

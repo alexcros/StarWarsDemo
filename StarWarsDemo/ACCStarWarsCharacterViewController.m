@@ -14,18 +14,10 @@
  @implementation AGTCharacterViewController
  
  
- -(id) initWithModel:(AGTStarWarsCharacter*)model{
- 
- if (self = [super initWithNibName:nil
- bundle:nil]) {
- _model = model;
- self.title = model.alias;
- }
- return self;
- }
  
  */
 #import "ACCStarWarsCharacterViewController.h"
+#import "WikiViewController.h"
 
 @implementation ACCStarWarsCharacterViewController
 
@@ -40,6 +32,56 @@
     return self;
 }
 
+-(void) viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
+    
+    // sincronizo modelo -> vista
+    [self syncWithModel];
+}
+
+#pragma mark - UISplitViewControllerDelegate
+-(void)splitViewController:(UISplitViewController *)svc
+   willChangeToDisplayMode:(UISplitViewControllerDisplayMode)displayMode{
+    
+    
+    if (displayMode == UISplitViewControllerDisplayModePrimaryHidden) {
+        // Hay que poner el botón en mi barra de navegación
+        self.navigationItem.rightBarButtonItem = svc.displayModeButtonItem;
+        
+        
+    }else if (displayMode == UISplitViewControllerDisplayModeAllVisible){
+        // Hay que quitar el botón de la barra de navegación (pareado incluido)
+        self.navigationItem.rightBarButtonItem = nil;
+        
+    }
+}
+
+#pragma mark - ACCStarWarsUTableViewControllerDelegate
+
+-(void) starWarsUTableViewController:(ACCStarWarsUTableViewController*) swuTableVC
+                  didSelectCharacter:(ACCStarWarsCharacter*) character
+{
+    
+    
+    // me dicen que cambie mi modelo
+    self.model = character;
+    [self syncWithModel];
+    
+}
+
+
+
+
+
+#pragma mark - Utils
+-(void) syncWithModel{
+    // IBAction = photo model
+    self.photoView.image = self.model.photo;
+    self.title = self.model.alias;
+    
+}
+
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
@@ -49,6 +91,22 @@
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
+
+#pragma mark - Actions
+
+-(IBAction)displayWikipedia:(id)sender{
+    
+    // Crear un WikiVC
+    WikiViewController *wikiVC = [[WikiViewController alloc] initWithModel:self.model];
+    
+    // Pushearlo
+    [self.navigationController pushViewController:wikiVC
+                                         animated:YES];
+    
+    
+}
+
+
 
 /*
 #pragma mark - Navigation

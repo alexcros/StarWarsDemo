@@ -17,6 +17,7 @@
 #import <UIKit/UIKit.h>
 #import "ACCStarWarsUniverse.h" // for import StarWarsUniverse model
 #import "ACCStarWarsUTableViewController.h"
+#import "ACCStarWarsCharacterViewController.h"
 
 @class ACCStarWarsUTableViewController; // compiler don't disturb
 
