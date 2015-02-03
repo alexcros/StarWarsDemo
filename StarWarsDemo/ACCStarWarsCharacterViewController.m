@@ -5,17 +5,7 @@
 //  Created by Alexandre Cros on 30/01/15.
 //  Copyright (c) 2015 Alex Cros. All rights reserved.
 //
-/*
- 
- #import "AGTCharacterViewController.h"
- #import "CafPlayer.h"
- #import "AGTWikiViewController.h"
- 
- @implementation AGTCharacterViewController
- 
- 
- 
- */
+
 #import "ACCStarWarsCharacterViewController.h"
 #import "WikiViewController.h"
 
@@ -33,28 +23,30 @@
     return self;
 }
 
-    
-
-
-
 -(void) viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
     
-    //[self resetSplit:[[UIApplication sharedApplication] statusBarOrientation]];
-    // sincronizo modelo -> vista
     [self syncWithModel];
 }
 
 #pragma mark - UISplitViewControllerDelegate
 
--(void)splitViewController:(UISplitViewController *)svc
-   willChangeToDisplayMode:(UISplitViewControllerDisplayMode)displayMode {
+// turn
+
+- (void)splitViewController:(UISplitViewController *)svc willShowViewController:(UIViewController *)aViewController invalidatingBarButtonItem:(UIBarButtonItem *)button
+{
+    //remove button from navigation bar in detail navigation controller
+    ((UINavigationController*)[svc.viewControllers objectAtIndex:1]).topViewController.navigationItem.rightBarButtonItem = nil;;
+}
+
+// init
+
+- (void)splitViewController: (UISplitViewController*)svc willHideViewController:(UIViewController *)aViewController withBarButtonItem:(UIBarButtonItem*)barButtonItem forPopoverController: (UIPopoverController*)pc{
     
-    if(displayMode == UISplitViewControllerDisplayModePrimaryHidden) {
-        self.navigationItem.rightBarButtonItem = svc.displayModeButtonItem;
-    } else {
-        self.navigationItem.rightBarButtonItem = nil;
-    }
+    //add button to navigation bar in detail navigation controller
+    
+    barButtonItem.title = @"Navigation";
+    ((UINavigationController*)[svc.viewControllers objectAtIndex:1]).topViewController.navigationItem.rightBarButtonItem = barButtonItem;
     
 }
 
@@ -64,18 +56,14 @@
                   didSelectCharacter:(ACCStarWarsCharacter*) character
 {
     
-    
-    // me dicen que cambie mi modelo
+    // new character selected
     self.model = character;
     [self syncWithModel];
     
 }
 
-
-
-
-
 #pragma mark - Utils
+
 -(void) syncWithModel{
     // IBAction = photo model
     self.photoView.image = self.model.photo;
@@ -83,14 +71,9 @@
     
 }
 
-
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
-    self.navigationController.navigationBar.tintColor = [UIColor colorWithRed:1
-                                                                        green:0
-                                                                         blue:0
-                                                                        alpha:1];
     
 }
 
@@ -109,8 +92,6 @@
     // Pushearlo
     [self.navigationController pushViewController:wikiVC
                                          animated:YES];
-
-  
     
 }
 

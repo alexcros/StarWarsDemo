@@ -33,6 +33,10 @@
 // iPad cfg
 -(void)configureForPad{
     
+    UISplitViewController *splitViewController = (UISplitViewController *)self.window.rootViewController;
+    UINavigationController *navigationController = [splitViewController.viewControllers lastObject];
+    splitViewController.delegate = (id)navigationController.topViewController;
+
     // 1. import and Init] alloc Model
     ACCStarWarsUniverse *swuModel = [[ACCStarWarsUniverse alloc]init];
     
