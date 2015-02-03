@@ -28,32 +28,34 @@
         
         _model = model;
         self.title = model.alias; // set title with alias
+        
     }
     return self;
 }
 
+    
+
+
+
 -(void) viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
     
+    //[self resetSplit:[[UIApplication sharedApplication] statusBarOrientation]];
     // sincronizo modelo -> vista
     [self syncWithModel];
 }
 
 #pragma mark - UISplitViewControllerDelegate
+
 -(void)splitViewController:(UISplitViewController *)svc
-   willChangeToDisplayMode:(UISplitViewControllerDisplayMode)displayMode{
+   willChangeToDisplayMode:(UISplitViewControllerDisplayMode)displayMode {
     
-    
-    if (displayMode == UISplitViewControllerDisplayModePrimaryHidden) {
-        // Hay que poner el botón en mi barra de navegación
+    if(displayMode == UISplitViewControllerDisplayModePrimaryHidden) {
         self.navigationItem.rightBarButtonItem = svc.displayModeButtonItem;
-        
-        
-    }else if (displayMode == UISplitViewControllerDisplayModeAllVisible){
-        // Hay que quitar el botón de la barra de navegación (pareado incluido)
+    } else {
         self.navigationItem.rightBarButtonItem = nil;
-        
     }
+    
 }
 
 #pragma mark - ACCStarWarsUTableViewControllerDelegate
@@ -85,6 +87,11 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
+    self.navigationController.navigationBar.tintColor = [UIColor colorWithRed:1
+                                                                        green:0
+                                                                         blue:0
+                                                                        alpha:1];
+    
 }
 
 - (void)didReceiveMemoryWarning {
@@ -107,7 +114,12 @@
     
 }
 
-
+-(IBAction)playSound:(id)sender{
+    
+    self.player = [CafPlayer cafPlayer];
+    [self.player playSoundData:self.model.soundData];
+    
+}
 
 /*
 #pragma mark - Navigation

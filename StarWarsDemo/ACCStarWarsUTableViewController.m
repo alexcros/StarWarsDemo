@@ -174,23 +174,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
                                          animated:YES];
     
 }
-/*
- #pragma mark -  AGTStarWarsUniverseViewControllerDelegate
- -(void) starWarsUniverseViewController:(AGTStarWarsUniverseViewController *)uVC
- didSelectCharacter:(AGTStarWarsCharacter *)character{
- 
- 
- // Crear un CharacterVC
- AGTCharacterViewController *charVC = [[AGTCharacterViewController alloc] initWithModel:character];
- 
- 
- // Pushearlo
- [self.navigationController pushViewController:charVC
- animated:YES];
- 
- 
- }
-*/
+
 /*
 // Override to support conditional editing of the table view.
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
