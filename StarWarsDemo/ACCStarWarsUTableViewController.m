@@ -5,31 +5,7 @@
 //  Created by Alexandre Cros on 30/01/15.
 //  Copyright (c) 2015 Alex Cros. All rights reserved.
 //
-/*
- #import "AGTStarWarsUniverseViewController.h"
- #import "AGTStarWarsUniverse.h"
- #import "AGTCharacterViewController.h"
- 
- @interface AGTStarWarsUniverseViewController ()
- @property (strong, nonatomic) AGTStarWarsUniverse *model;
- @end
- 
- @implementation AGTStarWarsUniverseViewController
- 
- -(id) initWithModel:(AGTStarWarsUniverse *) model
- style:(UITableViewStyle) style{
- 
- if (self = [super initWithStyle:style]) {
- _model = model;
- self.title = @"Star Wars";
- }
- return self;
- 
- }
- */
-
 #import "ACCStarWarsUTableViewController.h"
-#import "ACCStarWarsUniverse.h"
 #import "ACCStarWarsCharacterViewController.h"
 
 @interface ACCStarWarsUTableViewController ()
@@ -53,11 +29,6 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    // Uncomment the following line to preserve selection between presentations.
-    // self.clearsSelectionOnViewWillAppear = NO;
-    
-    // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-    // self.navigationItem.rightBarButtonItem = self.editButtonItem;
 }
 
 - (void)didReceiveMemoryWarning {
@@ -98,30 +69,23 @@ titleForHeaderInSection:(NSInteger)section{
     // Reuse Id
     static NSString *cellId = @"StarWarsCell"; // constant
     
-    // Averiguar de que personaje me están hablando
-    ACCStarWarsCharacter *character;
-    if (indexPath.section == IMPERIAL_SECTION) {
-        character = [self.model imperialCharacterAtIndex:indexPath.row];
-    }else{
-        character = [self.model rebelCharacterAtIndex:indexPath.row];
-    }
+    // Wich kind of character ?
+    ACCStarWarsCharacter *character = [self characterAtIndexPath:indexPath];// select method
     
-    // crear una celda
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellId]; // create cell var
     
     if (cell == nil) {
-        // tengo que crear la celda si no se creo anteriormente
+        // new cell
         cell = [[UITableViewCell alloc]
                 initWithStyle:UITableViewCellStyleSubtitle
                 reuseIdentifier:cellId];
     }
     
-    // sincronizar modelo (personaje) -> vista (celda)
+    // syncro model with view
     cell.imageView.image = character.photo;
     cell.textLabel.text = character.alias;
     cell.detailTextLabel.text = character.name;
-    
-    // La devuelvo
+
     return cell;
     
 }
@@ -130,8 +94,36 @@ titleForHeaderInSection:(NSInteger)section{
 -(void)tableView:(UITableView *)tableView
 didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     
-    // averiguar de que persoanje se trata
-    ACCStarWarsCharacter *character;
+    // wich character?
+    ACCStarWarsCharacter *character = [self characterAtIndexPath:indexPath];
+    
+
+   if ([self.delegate respondsToSelector:@selector(starWarsUTableViewController:didSelectCharacter:)]) {
+        // did you know the message? push message
+        [self.delegate starWarsUTableViewController:self
+                                 didSelectCharacter:character];
+        
+   }
+    
+    // Sending a notification
+    NSNotificationCenter *nc = [NSNotificationCenter defaultCenter];
+    
+    NSNotification *n = [NSNotification
+                         notificationWithName:CHARACTER_DID_CHANGE_NOTIFICATION_NAME
+                         object:self
+                         userInfo:@{CHARACTER_KEY: character}];
+    
+    [nc postNotification:n];
+    
+    //saving lastSelectedChar
+    [self saveLastSelectedCharAtSection:indexPath.section
+                                    row:indexPath.row];
+    
+}
+    // re-used method: character index path
+-(ACCStarWarsCharacter*)characterAtIndexPath:(NSIndexPath*) indexPath {
+
+    ACCStarWarsCharacter *character = nil;
     
     if (indexPath.section == IMPERIAL_SECTION) {
         character = [self.model imperialCharacterAtIndex:indexPath.row];
@@ -139,86 +131,71 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
         character = [self.model rebelCharacterAtIndex:indexPath.row];
     }
     
-    if ([self.delegate respondsToSelector:@selector(starWarsUTableViewController:didSelectCharacter:)]) {
-        // Entiende el mensaje se lo mando
-        [self.delegate starWarsUTableViewController:self
-                                 didSelectCharacter:character];
-        
-    }
-    
-    // Enviamos una notificación
-    NSNotificationCenter *nc = [NSNotificationCenter defaultCenter];
-    
-    NSDictionary *info = @{CHARACTER_KEY : character};
-    
-    NSNotification *n = [NSNotification
-                         notificationWithName:CHARACTER_DID_CHANGE_NOTIFICATION_NAME
-                         object:self
-                         userInfo:info];
-    
-    [nc postNotification:n];
-    
+    return character;
 }
-
 
 #pragma mark -  ACCStarWarsUTableViewControllerDelegate
 
 -(void) starWarsUTableViewController:(ACCStarWarsUTableViewController *) swuTableVC
                     didSelectCharacter:(ACCStarWarsCharacter *)character{
     
-    // Crear un CharacterVC
+    // create CharacterVC
     ACCStarWarsCharacterViewController *charVC = [[ACCStarWarsCharacterViewController alloc]initWithModel:character];
 
-    // Pushearlo
+    // Push
     [self.navigationController pushViewController:charVC
                                          animated:YES];
     
 }
+#pragma mark - NSUserDefaults
 
-/*
-// Override to support conditional editing of the table view.
-- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
-    // Return NO if you do not want the specified item to be editable.
-    return YES;
+- (NSDictionary *)setDefaults
+{
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    
+    // show the first character by default
+    NSDictionary *defaultCharacterCoords = @{SECTION_KEY : @(IMPERIAL_SECTION), ROW_KEY : @0};
+    
+    // object assignement
+    [defaults setObject:defaultCharacterCoords
+                 forKey:LAST_CHARACTER_KEY];
+    
+    // saving (optional)
+    [defaults synchronize];
+    
+    return defaultCharacterCoords;
 }
-*/
 
-/*
-// Override to support editing the table view.
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (editingStyle == UITableViewCellEditingStyleDelete) {
-        // Delete the row from the data source
-        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-    } else if (editingStyle == UITableViewCellEditingStyleInsert) {
-        // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-    }   
+- (void)saveLastSelectedCharAtSection:(NSUInteger)section row:(NSUInteger)row
+{
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    [defaults setObject:@{SECTION_KEY : @(section),
+                          ROW_KEY     : @(row)}
+                 forKey:LAST_CHARACTER_KEY];
+    
+    [defaults synchronize]; // saving, optional
 }
-*/
 
-/*
-// Override to support rearranging the table view.
-- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath {
+-(ACCStarWarsCharacter*) lastCharacterSelected {
+    
+    NSIndexPath *indexPath = nil;
+    NSDictionary *coords = nil;
+    
+    coords = [[NSUserDefaults standardUserDefaults] objectForKey:LAST_CHARACTER_KEY];
+    
+    if (coords == nil) {
+        // coords = nil means no key in LAST_CHARACTER_KEY
+        // app loaded by the first time
+        // We put a default value: the first imperial character in db
+        coords = [self setDefaults];
+    }
+    
+    // coords to indexpath
+    indexPath = [NSIndexPath indexPathForRow:[[coords objectForKey: ROW_KEY] integerValue]
+                                   inSection:[[coords objectForKey: SECTION_KEY] integerValue]];
+    
+    // return wine by indexPath
+    return [self characterAtIndexPath:indexPath];
 }
-*/
-
-/*
-// Override to support conditional rearranging of the table view.
-- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath {
-    // Return NO if you do not want the item to be re-orderable.
-    return YES;
-}
-*/
-
-
-
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 @end

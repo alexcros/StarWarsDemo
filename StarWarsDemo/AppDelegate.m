@@ -7,16 +7,17 @@
 //
 
 #import "AppDelegate.h"
+#import "ACCStarWarsCharacterViewController.h"
+#import "ACCStarWarsCharacter.h"
 #import "ACCStarWarsUniverse.h"
 #import "ACCStarWarsUTableViewController.h"
-#import "ACCStarWarsCharacterViewController.h"
+#import "WikiViewController.h"
 
 @interface AppDelegate ()
 
 @end
 
 @implementation AppDelegate
-
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     
@@ -44,36 +45,29 @@
     ACCStarWarsUTableViewController *swuTableVC = [[ACCStarWarsUTableViewController alloc]initWithModel:swuModel
                                                                                                   style:UITableViewStylePlain];
     // 3. Create StarWarsCharacterViewController with .xib for imperial and rebel, this controller will show the characters
-    ACCStarWarsCharacterViewController *charVC = [[ACCStarWarsCharacterViewController alloc]
-                                                  initWithModel:[swuModel imperialCharacterAtIndex:0]];// Call swuModel.imperialChar property
     
-    //4.1 combinador 1. Inicializamos y colocamos en memoria un navigator para el tableView personajes y push StarWarsUniverseController
-    // Creamos los combinadores: Navigation Controllers
+    ACCStarWarsCharacterViewController *charVC = [[ACCStarWarsCharacterViewController alloc]initWithModel:[swuTableVC lastCharacterSelected]]; // call method
+    /*
+     4.1 combinator
+     Init a navigation controller for tableView Characters on the left in memory      */
+    
     UINavigationController *tableNav = [[UINavigationController alloc]init];
     tableNav.viewControllers=@[swuTableVC];
-    // push TableVC
-   //[tableNav pushViewController:swuTableVC
-     //           animated:NO];
-    //4.2 combinador 2: Inicializamos y colocamos en memoria otro controlador de navegador: cargamos el StarWarsCharacterViewController xib
+   
+    // 4.2 combinator 2: Init another controller in memory, right side (delegate) CharacterViewController
     UINavigationController *charNav = [[UINavigationController alloc] init];
     charNav.viewControllers=@[charVC];
-  //[charNav pushViewController:charVC
-    //                   animated:NO];
 
-    // 5. Iniciamos SplitVC: por orden colocamos los navegadores 5.1.la tabla StarWarsUniverse a la izquierda y 2. nav. StarWarsCharacter a la derecha
-    
+    // 5. Init SplitViewController: tableNav on the left, character on the right side
     UISplitViewController *splitVC = [[UISplitViewController alloc] init];
     [splitVC setViewControllers:@[tableNav, charNav]]; //set VC to split
     
-    // 6. Asignamos como delegado a charVC StarWarsCharacterViewController characteres
-    
-    // Asignamos delegados
-   splitVC.delegate = charVC;
-  swuTableVC.delegate = charVC;
-    
-    // 7. Asignamos SplitVC// Lo asignamos como root, carga la window en appdelegate
+    // Who is the delegate?
+    splitVC.delegate = charVC;
+    swuTableVC.delegate = charVC;
+   
+    // 7. assigning SplitViewController as a root and load the window
     self.window.rootViewController = splitVC;
-    // Override point for customization after application launch.
     
 }
 
